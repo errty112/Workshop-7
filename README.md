@@ -2,9 +2,19 @@
 
 # COMP30019 – Graphics and Interaction
 
-## Workshop 5
+## Workshop 7: Introduction to Shaders
 
-# Introduction:
+<!-- <p align="center">
+  <img src="Gifs/game.gif">
+</p> -->
+
+<p align="center">
+  <a href="https://comp30019.github.io/Workshop-7-Solution/" alt="Play Online">
+    <img src="https://img.shields.io/static/v1?label=Play%20Solution&message=comp30019.github.io/Workshop-7-Solution/&color=blue&logo=unity" />
+  </a>
+</p>
+
+### Introduction
 
 In this workshop you will do some basic shader programming using
 Unity's built-in rendering pipeline. 
@@ -35,7 +45,7 @@ The workshop comes with the following assets:
 > Cg is no longer developed, but HLSL is actively maintained by Microsoft as 
 > the shader language for DirectX APIs. 
 
-### Tasks:
+### Tasks
 
 #### 1. Assign a shader within a script
 
