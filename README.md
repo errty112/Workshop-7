@@ -219,36 +219,48 @@ variable declared in the shader, namely `"_Color"`.
 
 #### 5. Vertex colours
 
-Uniform properties are very useful, but obviously limited. For example, how do
-we pass data to our shader on a per-vertex basis? It turns out arrays within
-the `Mesh` class map to the shader _semantics_ that tag `vertIn` shader
-structure variables. Recall how you defined meshes in previous weeks. We of
-course had to define the vertex positions, but we also defined vertex _colours_
-which corresponded to positions one-to-one (by index). 
+Uniform properties are very useful, but obviously limited. In many cases we
+want to pass data from the CPU to the GPU that is uniquely defined for each
+vertex in a mesh. It is possible to do this via arrays within the `Mesh` class.
+These arrays directly map to fields in the `vertIn` shader structure variables
+via [shader
+semantics](https://docs.unity3d.com/Manual/SL-ShaderSemantics.html).
 
-Once uploaded to the GPU, which is an internal Unity process, these arrays are
-"zipped" together and made available on a per-vertex basis in your shaders via
-the `vertIn` structure. The glue here is the _semantics_ that are used to tag
-shader input structures. For example:
+A concrete example where we need to pass data in this manner is when we require
+per-vertex colour information. Recall how we defined meshes in [workshop
+2](https://github.com/COMP30019/Workshop-2). We defined an array of vertex
+positions in order to give the mesh its shape, but we _also_ defined an array
+of vertex colours (of the same length, with a one-to-one mapping). Behind the scenes, Unity uploads these
+arrays to the GPU, and by the time we try to access them in a shader, they have
+been [zipped](https://en.wikipedia.org/wiki/Zipping_(computer_science))
+together and made accessible on a _per-vertex_ basis via the `vertIn`
+structure. The "glue" between these arrays (in the C# script) and the `vertIn`
+fields (in the shader) is a set of [shader
+semantics](https://docs.unity3d.com/Manual/SL-ShaderSemantics.html) that come
+after colons (`:`) on the respective field definitions. In this example there
+are two semantics required:
 
-- `POSITION` - binds to the `vertices` array in a `Mesh`, set via [`SetVertices()`](https://docs.unity3d.com/ScriptReference/Mesh.SetVertices.html).
-- `COLOR` - binds to the `colors` array in a `Mesh`, set via
+- `POSITION`: binds to the `vertices` array in a `Mesh`, set via [`SetVertices()`](https://docs.unity3d.com/ScriptReference/Mesh.SetVertices.html).
+- `COLOR`: binds to the `colors` array in a `Mesh`, set via
   [`SetColors()`](https://docs.unity3d.com/ScriptReference/Mesh.SetColors.html).
 
-In lieu of the above, your next task is to modify the shader to utilise the
-vertex colours defined in `GenerateCube.cs`. You will need to of course modify
-the structures `vertIn` and `vertOut`, as well as make small modifications to
-the vertex and fragment shaders themselves. 
+Your next task is to modify the shader to utilise the vertex colours (already
+defined in `GenerateCube.cs`), which currently only makes use of the `POSITION`
+semantic. You will need to modify the structures `vertIn` and `vertOut`, as
+well as make small modifications to both the vertex and fragment shaders
+themselves. (Colour information needs to reach the fragment shader, but first
+you'll still need to pass it through the vertex shader as per the rendering
+pipeline sequence.)
 
 <p align="center">
   <img src="Gifs/3-Cube.png" width="500">
 </p>
 
-Once this is done, change any single vertex colour in `GenerateCube.cs` so that
-one triangle does not have all identical vertex colours. Notice how there is a
-gradient effect on the rendered triangle (you most certainly did not "code"
-this effect in your shader!). Which step in the rendering pipeline facilitates
-this?
+Once this is done, as an experiment, change any _single_ vertex colour in
+`GenerateCube.cs` so that one triangle does not have all identical vertex
+colours. Notice how there is a gradient effect on the rendered triangle (you
+most certainly did not "code" this effect in your shader!). Which step
+in the rendering pipeline is responsible for this effect?
 
 <p align="center">
   <img src="Gifs/4-Cube.png" width="500">
@@ -289,8 +301,9 @@ dragged into the respective inspector field.
 Once you've assigned the texture, you should notice the cube is textured, but
 not _every_ face is mapped correctly. Your final task here is to fix the
 erroneous UV coordinates in `GenerateCube.cs`. This is somewhat tedious, as was
-manually figuring out vertex positions in previous weeks, but it's a great
-exercise for consolidating your understanding UV coordinates. 
+manually figuring out vertex positions in [workshop
+2](https://github.com/COMP30019/Workshop-2), but it's a great exercise for
+consolidating your understanding UV coordinates. 
 
 <p align="center">
   <img src="Gifs/5-Texture.gif">
