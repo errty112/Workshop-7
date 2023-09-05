@@ -8,6 +8,9 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class GenerateCube : MonoBehaviour
 {
+    [SerializeField] private Shader cubeshader;
+    [SerializeField] private Shader cubetexture;
+    [SerializeField] private Texture cubeTexture;
     private void Start()
     {
         // Generate the mesh and assign to the mesh filter.
@@ -19,7 +22,8 @@ public class GenerateCube : MonoBehaviour
         // Recall how we set the material's "color" in the first workshop:
         // e.g. material.color = ...;
         // Turns out we can also set the material's shader in a similar way:
-        material.shader = null;
+        material.shader = cubetexture;
+        material.SetTexture("_MainTex", cubeTexture);
     }
 
     private Mesh CreateMesh()
@@ -139,12 +143,12 @@ public class GenerateCube : MonoBehaviour
             Color.blue,
 
             // Back face
-            Color.blue,
+            Color.green,
             Color.blue,
             Color.blue,
 
             Color.blue,
-            Color.blue,
+            Color.green,
             Color.blue
         });
 
